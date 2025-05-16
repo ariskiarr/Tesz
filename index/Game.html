@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,700;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Game Ular</title>
+    <style>
+      body {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f9f9f9;
+        font-family: poppins, sans-serif;
+      }
+      canvas {
+        background-color: #000;
+      }
+      .controls {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .row {
+        display: flex;
+        justify-content: center;
+        
+      }
+      .controls button,
+      .actions button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      #score {
+        margin-bottom: 10px;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .actions {
+        margin-top: 0.5rem;
+      }
+      .btstop {
+        padding: 0.5rem 1rem;
+        border: solid 1px #000;
+        color: white;
+        border-radius: 0.5rem;
+      }
+      .btstop:active {
+        scale: 0.9;
+      }
+      .btplay {
+        padding: 0.5rem 1rem;
+        border: 1px solid #000;
+        border-radius: 0.5rem;
+      }
+      .btplay:active {
+        scale: 0.9;
+      }
+
+        .header {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            margin-top: 3rem;
+        }
+        .header h1 {
+            color: #9b7d60;
+            font-size: 1.5rem;
+            font-weight: bold;
+
+        }
+        
+    </style>
+  </head>
+  <body>
+    </div>
+    <div class="header">
+        <h1>Game Ular</h1>
+        <p>Selamat datang di Game Ular! Kamu harus dapat skor 10 untuk mendapatkan username dan password, "selamat berjuang!"</p>
+    </div>
+    <div id="score">Skor: 0</div>
+    <canvas id="gameCanvas" width="300" height="300"></canvas>
+    <div class="controls">
+      <div><button onclick="changeDirection('up')"><img src="/img/btup.png" alt=""></button></div>
+      <div class="row">
+        <button onclick="changeDirection('left')"><img src="/img/btleft.png" alt=""></button>
+        <button onclick="changeDirection('down')"><img style="transform: rotate(180deg);"src ="/img/btup.png" alt=""></button>
+        <button onclick="changeDirection('right')"><img style="transform: rotate(180deg);" src="/img/btleft.png" alt=""></button>
+      </div>
+    </div>
+    <hr style="border: 1px solid #ccc; width: 80%;">
+    <div class="actions">
+      <button class="btstop" onclick="stopGame()"><img src="/img/btstop.png" alt=""></button>
+      <button class="btplay" onclick="startGame()"><img src="/img/btplay.png" alt=""></button>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+      const box = 20;
+      let score = 0;
+      let interval;
+
+      let snake = [{ x: 5 * box, y: 5 * box }];
+      let direction = "right";
+
+      let food = {
+        x: Math.floor(Math.random() * 15) * box,
+        y: Math.floor(Math.random() * 15) * box,
+      };
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowUp" && direction !== "down") direction = "up";
+        if (event.key === "ArrowDown" && direction !== "up") direction = "down";
+        if (event.key === "ArrowLeft" && direction !== "right")
+          direction = "left";
+        if (event.key === "ArrowRight" && direction !== "left")
+          direction = "right";
+      });
+
+      function changeDirection(dir) {
+        if (dir === "up" && direction !== "down") direction = "up";
+        if (dir === "down" && direction !== "up") direction = "down";
+        if (dir === "left" && direction !== "right") direction = "left";
+        if (dir === "right" && direction !== "left") direction = "right";
+      }
+
+      function resetGame() {
+        score = 0;
+        document.getElementById("score").textContent = "Skor: " + score;
+        snake = [{ x: 5 * box, y: 5 * box }];
+        direction = "right";
+        food = {
+          x: Math.floor(Math.random() * 15) * box,
+          y: Math.floor(Math.random() * 15) * box,
+        };
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < snake.length; i++) {
+          ctx.fillStyle = i === 0 ? "lime" : "green";
+          ctx.fillRect(snake[i].x, snake[i].y, box, box);
+        }
+
+        ctx.fillStyle = "red";
+        ctx.fillRect(food.x, food.y, box, box);
+
+        let headX = snake[0].x;
+        let headY = snake[0].y;
+
+        if (direction === "right") headX += box;
+        if (direction === "left") headX -= box;
+        if (direction === "up") headY -= box;
+        if (direction === "down") headY += box;
+
+        if (
+          headX < 0 ||
+          headY < 0 ||
+          headX >= canvas.width ||
+          headY >= canvas.height ||
+          snake.some(
+            (seg, index) => index !== 0 && seg.x === headX && seg.y === headY
+          )
+        ) {
+          resetGame();
+          return;
+        }
+
+        let newHead = { x: headX, y: headY };
+
+        if (headX === food.x && headY === food.y) {
+          score++;
+          document.getElementById("score").textContent = "Skor: " + score;
+          food = {
+            x: Math.floor(Math.random() * 15) * box,
+            y: Math.floor(Math.random() * 15) * box,
+          };
+
+          if (score === 10) {
+            alert("Selamat! Anda telah mendapatkan 10 poin!");
+          }
+          else if (score === 50) {
+            alert("seriuss ni zaa kamu main sampe segini??!");
+          }
+        } else {
+          snake.pop();
+        }
+
+        snake.unshift(newHead);
+      }
+
+      function stopGame() {
+        clearInterval(interval);
+      }
+
+      function startGame() {
+        stopGame();
+        score = 0;
+        document.getElementById("score").textContent = "Skor: " + score;
+        snake = [{ x: 5 * box, y: 5 * box }];
+        direction = "right";
+        food = {
+          x: Math.floor(Math.random() * 15) * box,
+          y: Math.floor(Math.random() * 15) * box,
+        };
+        interval = setInterval(draw, 300);
+      }
+
+      interval = setInterval(draw, 300);
+    </script>
+  </body>
+</html>

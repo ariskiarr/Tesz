@@ -1,0 +1,103 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: poppins, sans-serif;
+    background-color: #f9f9f9;
+}
+
+
+@media (max-width: 400px) {
+  body{
+    background-color: #F3F2F0;
+    padding: 0.5rem;
+  }
+  
+  h1{
+    font-weight: bold;
+  }
+    .container {
+    padding: 16px 8px;
+    max-width: 100vw;
+    border-radius: 0;
+    box-shadow: none;
+    /* background-color: #f3f4f6; */
+  }
+
+    .container h1 {
+        font-size: 2.5rem;
+        margin-bottom: 16px;
+        justify-content: center;
+        align-items: center;
+        display: grid;
+        color: #9B7D60;
+    }
+
+    .container img{
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        justify-content: centar;
+        align-items: center;
+        display: flex;
+        margin-bottom: 2rem;
+
+    }
+
+    .tombol {
+        direction: column;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+        gap: 0.5rem;
+    }
+
+    .btlogin{
+        width: 100%;
+        padding: 0.5rem 8rem  ;
+        /* background-color: #9B7D60; */
+        color: #9B7D60;
+        border: 2px solid #9B7D60;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+
+    }
+
+    .btgame{
+        width: 100%;
+        padding: 0.5rem 8rem ;
+        background-color: #9B7D60;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        text-decoration: none;
+    }
+
+    .content{
+        justify-content: center;
+        align-items: center;
+        display: grid;
+        text-align: center;
+    }
+
+    .btgame:active{
+        transform: scale(0.95);
+    }
+    .btlogin:active{
+        transform: scale(0.95);
+    }
+
+    
+
+
+}
+
