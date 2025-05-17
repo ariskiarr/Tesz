@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById('password').value;
 
         if (username === 'izzaa' && password === '123456') {
-            window.location.href = 'index.html';
+            window.location.href = 'homepage.html';
         } else {
             alert('Username atau password salah! Main lagi sana!!');
         }
